@@ -19,6 +19,21 @@ import csv
 import re
 
 
+def contar_lineas(archivo):
+    '''Función para el calculo de lineas de un archivo ingresado
+    por el usuario retornando la cantidad de lineas leidas.'''
+
+    fi = open(archivo, 'r')
+    cant_lineas = 0
+    for line in fi: 
+        cant_lineas += 1
+        print(line)
+    
+    print("la cantidad de lineas leidas son:", cant_lineas)
+    return cant_lineas
+    fi.close()
+
+
 def ej1():
     # Ejercicios con archivos txt
     cantidad_lineas = 0
@@ -35,10 +50,12 @@ def ej1():
     y cumpla el objetivo especificado, retornando la cantidad
     de líneas encontradas.
     '''
-
+    archivo = input('Ingrese el nombre del archivo:\n')
+    contar_lineas(archivo)
+    
 
 def ej2():
-    # Ejercicios con archivos txt
+    # Ejercicios con archivos txt      # Solo copia las lineas pares :(
     cantidad_lineas = 0
     '''
     Copy paste!!
@@ -55,10 +72,23 @@ def ej2():
     al final del proceso el valor.
     '''
 
-    # fi = open('nota.txt', 'r')
+    # fi = open('notas.txt', 'r')
     # fo = open(.......)
-
+    fi = open('notas.txt', 'r')
+    fo = open('notas_1.txt', 'w')
+        
+    for line in fi:
+        line = fi.readline()
+        print(line)
+        fo.write(line)
+        cantidad_lineas += 1
+    
+    print('La cantidad de lineas copiadas son:', cantidad_lineas)
+        
     # Recuerde cerrar los archivos al final ;)
+    
+    fi.close()
+    fo.close()
 
 
 def ej3():
@@ -71,11 +101,24 @@ def ej3():
     de departamentos de 3 ambientes disponibles.
     Al finalizar el proceso, imprima en pantalla los resultados.
     '''
+    with open('propiedades.csv') as csvfile:
+        datos = list(csv.DictReader(csvfile))
+        conteo_2 = 0
+        conteo_3 = 0
 
+        for i in range(len(datos)):
+            if datos[i].get('ambientes') == '2':
+                conteo_2 += 1
+                print(datos[i])
+            if datos[i].get('ambientes') == '3':
+                conteo_3 += 1
+                print(datos[i])
+        print('La cantidad de departamentos de 2 ambientes son', conteo_2)
+        print('La cantidad de departamentos de 2 ambientes son', conteo_3)
 
 def ej4():
     # Ejercicios con diccionarios
-    inventario = {'manzanas': 6}
+    # inventario = {'manzanas': 6}
 
     '''
     Realice un programa que pida por consola
@@ -97,15 +140,36 @@ def ej4():
 
     Se debe terminar ese segundo bucle cuando se ingrese la palabra FIN
     '''
-
+    
     # 1) Bucle 1
     # Generar y completar el diccionario con las frutas y cantidades
     # ingresadas por consola hasta ingresar la palabra "FIN"
+    inventario = {}
+    frut_verd = True
+
+    while True:
+        frut_verd = input('Ingrese la fruta o verdura:\n')
+        if frut_verd != 'FIN':
+            cantidad = int(input('Ingrese la cantidad:\n'))
+            inventario[frut_verd] = cantidad
+        else:
+            break
+    
+    print(inventario)
 
     # 2) Bucle 2
     # Ingresar por consola la fruta que desea conocer en stock
     # Finalizar cuando la fruta ingresada sea igual a "FIN"
-
+    
+    frut_verd = True
+    while True:
+        frut_verd = input('Ingrese la fruta o verdura a buscar\n')    
+        if frut_verd != 'FIN':
+            for k, v in inventario.items():
+                if k == frut_verd:
+                    print(inventario[frut_verd])
+        else:
+            break
 
 def ej5():
     # Ejercicios con archivos CSV
@@ -137,15 +201,31 @@ def ej5():
     # Recuerde crear el header correspondiente con "writeheader", el cual
     # se debe especificar al abrir el archivo.
 
+    csvfile = open('ec5_verduleria.csv', 'w', newline='')
+
+    header = ['Fruta Verdura', 'Cantidad']
+    writer = csv.DictWriter(csvfile, fieldnames=header)
+    writer.writeheader()
+
     # Bucle....
+
+    while True:
+        frut_verd = input('Ingrese la fruta o verdura:\n')
+        if frut_verd != 'FIN':
+            cantidad = int(input('Ingrese la cantidad:\n'))
+            writer.writerow({'Fruta Verdura': frut_verd, 'Cantidad': cantidad})
+        else:
+            break
 
     # writer.writerow({'Fruta Verdura': ....., 'Cantidad': ....})
 
+    csvfile.close()
+    
 
 if __name__ == '__main__':
     print("Bienvenidos a otra clase de Inove con Python")
-    ej1()
+    #ej1()
     #ej2()
     #ej3()
     #ej4()
-    #ej5()
+    ej5()
