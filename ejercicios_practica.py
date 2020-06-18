@@ -16,9 +16,12 @@ __email__ = "alumnos@inove.com.ar"
 __version__ = "1.1"
 
 
+import csv
+
+
 def ej1():
     print("Cuenta caracteres")
-    cantidad_letras = 0
+    
 
     '''
     Realizar un prorgrama que cuenta la cantidad de caracteres
@@ -28,6 +31,27 @@ def ej1():
     Debe realizar la sumatoria total de la cantidad de caracteres de todas
     las líneas para obtener el total del archivo e imprimirlo en pantalla
     '''
+    # abrir el archivo texto.txt
+    fi = open('texto.txt', 'r')
+    
+    cantidad_lineas = 0
+    cantidad_letras = 0
+  
+    # Cuenta la cantidad de lineas en texto.txt
+    for line in fi: 
+        cantidad_lineas += 1
+    print('La cantidad de lineas son', cantidad_lineas)
+
+    # Vuelve el cursor al comienzo del texto
+    fi.seek(0)
+
+    # Cuenta la cantidad de caracteres en el texto
+    for i in range(cantidad_lineas):    
+        cantidad_letras += len(fi.readline())
+    print('La cantidad de caracteres son', cantidad_letras)
+    
+    # cerrar el archivo texto.txt
+    fi.close()
 
 
 def ej2():
@@ -50,6 +74,28 @@ def ej2():
     de texto de la consola antes de copiar la archivo.
     '''
 
+    # Abrir el archivo eje_pract2.txt en modo write ('w')
+    fo = open('eje_pract2.txt', 'w')
+
+    line = ''
+    total_caracteres = 0
+        
+    # bucle para introducir texto en archivo eje_pract2.txt
+    while line != '\n':
+        line = input('Ingrese linea de texto: \n')
+        
+        # acumulador de cantidad de caracteres ingresados por linea
+        total_caracteres += len(line)
+        
+        # concatena '\n' para hacer el salto de linea
+        line = line + '\n'
+        
+        # se copia a la memoria
+        fo.writelines(line)
+    
+    print('Se han ingresado al texto', total_caracteres, 'caracteres')
+                
+    fo.close()
 
 def ej3():
     print("Escrutinio de los alquileres de Capital Federal")
@@ -68,7 +114,28 @@ def ej3():
     4) Obtener el mínimo valor de alquiler en "pesos"
     de la cantidad de ambientes deseados.
     '''
+    
+    with open('propiedades.csv') as csvfile:
+        data = list(csv.DictReader(csvfile))
+       
+        contador_ARS = 0
+        acum_precios = 0
+        list_precios = []
 
+        for i in range(len(data)):
+            if data[i].get('moneda') == 'ARS':
+                contador_ARS += 1
+                precio = float(data[i].get('precio'))
+                list_precios.append(precio)
+                # print(precio)
+                acum_precios += precio
+        
+        promedio = acum_precios / contador_ARS
+        print('La cantidad de alquileres en pesos son', contador_ARS)
+        print('El promedio es', round(promedio, 2))
+        print('El valor maximo es', max(list_precios))
+        print('El valor minimo es', min(list_precios))
+        
 
 def ej4():
     print("Ahora sí! buena suerte :)")
@@ -124,5 +191,5 @@ if __name__ == '__main__':
     print("Ejercicios de práctica")
     #ej1()
     #ej2()
-    #ej3()
+    ej3()
     #ej4()
