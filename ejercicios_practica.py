@@ -17,6 +17,7 @@ __version__ = "1.1"
 
 
 import csv
+from datetime import datetime
 
 
 def ej1():
@@ -185,11 +186,72 @@ def ej4():
     de la carrera. Sería igual al ej4 la información recolectada y calculada.
 
     '''
+    # Falta calcular el promedio del tiempo
+
+    list_swim = []
+    list_bike = []
+    list_run = []
+
+    with open('2019 Ironman World Championship Results.csv') as csvfile:
+        data = list(csv.DictReader(csvfile))
+
+        opcion = 0
+        print('---------------------------------------')
+        print('  1 - MPRO')
+        print('  2 - M45-49')
+        print('  3 - M25-29')
+        print('  4 - M18-24')
+        print('---------------------------------------')
+        
+        opcion = int(input("Elija la categoria a evaluar\n"))
+    
+        if opcion == 1:
+            categoria = 'MPRO'
+        if opcion == 2:
+            categoria = 'M45-49'
+        if opcion == 3:
+            categoria = 'M25-29'
+        if opcion == 4:
+            categoria = 'M18-24'
+                
+        print('---------Categoría', categoria,'---------------')
+        
+        for i in range(len(data)):
+            if data[i].get('Division') == categoria:
+                if data[i].get('Swim') != '':
+                    time = data[i].get('Swim')
+                    time_1 = datetime.strptime(time, '%H:%M:%S').time()
+                    list_swim.append(time_1)
+                
+                if data[i].get('Bike') != '':
+                    time = data[i].get('Bike')
+                    time_1 = datetime.strptime(time, '%H:%M:%S').time()
+                    list_bike.append(time_1)        
+                    
+                if data[i].get('Run') != '':
+                    time = data[i].get('Run')
+                    time_1 = datetime.strptime(time, '%H:%M:%S').time()
+                    list_run.append(time_1)
+
+        print('Resultados de etapa de natación')
+        print('- Cantidad de competidores que terminaron la etapa', len(list_swim))
+        print('- Tiempo de competidor mas rápido', min(list_swim))
+        print('- Tiempo de competidor mas lento', max(list_swim))
+        
+        print('Resultados de etapa de ciclismo')
+        print('- Cantidad de competidores que terminaron la etapa', len(list_bike))
+        print('- Tiempo de competidor mas rápido', min(list_bike))
+        print('- Tiempo de competidor mas lento', max(list_bike))
+
+        print('Resultados de running')
+        print('- Cantidad de competidores que terminaron la etapa', len(list_run))
+        print('- Tiempo de competidor mas rápido', min(list_run))
+        print('- Tiempo de competidor mas lento', max(list_run))
 
 
 if __name__ == '__main__':
     print("Ejercicios de práctica")
     #ej1()
     #ej2()
-    ej3()
-    #ej4()
+    #ej3()
+    ej4()
