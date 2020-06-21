@@ -186,69 +186,82 @@ def ej4():
     de la carrera. Sería igual al ej4 la información recolectada y calculada.
 
     '''
-    # Falta calcular el promedio del tiempo
-
-    list_swim = []
-    list_bike = []
-    list_run = []
-
-    with open('2019 Ironman World Championship Results.csv') as csvfile:
-        data = list(csv.DictReader(csvfile))
-
-        opcion = 0
-        print('---------------------------------------')
-        print('  1 - MPRO')
-        print('  2 - M45-49')
-        print('  3 - M25-29')
-        print('  4 - M18-24')
-        print('---------------------------------------')
-        
-        opcion = int(input("Elija la categoria a evaluar\n"))
+    print('---------------------------------------')
+    print('  1 - MPRO')
+    print('  2 - M45-49')
+    print('  3 - M25-29')
+    print('  4 - M18-24')
+    print('---------------------------------------')
     
+    while True:
+        opcion = int(input("Elija la categoria a evaluar\n"))
         if opcion == 1:
             categoria = 'MPRO'
-        if opcion == 2:
+        elif opcion == 2:
             categoria = 'M45-49'
-        if opcion == 3:
+        elif opcion == 3:
             categoria = 'M25-29'
-        if opcion == 4:
+        elif opcion == 4:
             categoria = 'M18-24'
-                
-        print('---------Categoría', categoria,'---------------')
+        else:
+            print('Entrada incorrecta, el programa ha finalizado...')
+            break
         
-        for i in range(len(data)):
-            if data[i].get('Division') == categoria:
-                if data[i].get('Swim') != '':
-                    time = data[i].get('Swim')
-                    time_1 = datetime.strptime(time, '%H:%M:%S').time()
-                    list_swim.append(time_1)
+        with open('2019 Ironman World Championship Results.csv') as csvfile:
+            data = list(csv.DictReader(csvfile))
                 
-                if data[i].get('Bike') != '':
-                    time = data[i].get('Bike')
-                    time_1 = datetime.strptime(time, '%H:%M:%S').time()
-                    list_bike.append(time_1)        
-                    
-                if data[i].get('Run') != '':
-                    time = data[i].get('Run')
-                    time_1 = datetime.strptime(time, '%H:%M:%S').time()
-                    list_run.append(time_1)
-
-        print('Resultados de etapa de natación')
-        print('- Cantidad de competidores que terminaron la etapa', len(list_swim))
-        print('- Tiempo de competidor mas rápido', min(list_swim))
-        print('- Tiempo de competidor mas lento', max(list_swim))
+            print('---------Categoría', categoria,'---------------')
         
-        print('Resultados de etapa de ciclismo')
-        print('- Cantidad de competidores que terminaron la etapa', len(list_bike))
-        print('- Tiempo de competidor mas rápido', min(list_bike))
-        print('- Tiempo de competidor mas lento', max(list_bike))
+            list_swim = []
+            list_bike = []
+            list_run = []
+            list_disciplinas = ['Swim', 'Bike', 'Run']
 
-        print('Resultados de running')
-        print('- Cantidad de competidores que terminaron la etapa', len(list_run))
-        print('- Tiempo de competidor mas rápido', min(list_run))
-        print('- Tiempo de competidor mas lento', max(list_run))
+            for i in range(len(data)):
+                if data[i].get('Division') == categoria:  
+                    for disciplina in list_disciplinas:
+                        if data[i].get(disciplina) != '':
+                            time = data[i].get(disciplina)
+                            time = time.split(":")
+                            for j in range(3):               
+                                time[j] = int(time[j])
+                            total_time = time[0] * 3600 + time[1] * 60 + time[2] 
+                            if disciplina == 'Swim':
+                                list_swim.append(total_time)
+                            if disciplina == 'Bike':
+                                list_bike.append(total_time)
+                            if disciplina == 'Run':
+                                list_run.append(total_time)
+     
+            listas = [list_swim, list_bike, list_run]
 
+            orden_dis = -1
+            for disciplina in listas:
+            
+                orden_dis += 1 
+                print('Disciplina:', list_disciplinas[orden_dis])
+            
+                time_min = min(disciplina)
+                hora = time_min // 3600
+                minuto = int(((time_min / 3600) - hora) * 60)
+                segundo = int(((((time_min / 3600) - hora) * 60) - minuto) * 60)
+                print('-- Menor tiempo:',hora,'horas', minuto, 'minutos', segundo, 'segundos') 
+        
+                time_max = max(disciplina)
+                hora = time_max // 3600
+                minuto = int(((time_max / 3600) - hora) * 60)
+                segundo = int(((((time_max / 3600) - hora) * 60) - minuto) * 60)
+                print('-- Mayor tiempo:',hora,'horas', minuto, 'minutos', segundo, 'segundos')                    
 
+                promedio = sum(disciplina) / len(disciplina)
+                hora = promedio // 3600
+                minuto = int(((promedio / 3600) - hora) * 60)
+                segundo = int(((((promedio / 3600) - hora) * 60) - minuto) * 60)
+                print('-- Tiempo promedio:',hora,'horas', minuto, 'minutos', segundo, 'segundos')
+        
+        print('Programa terminado...')
+        break
+        
 if __name__ == '__main__':
     print("Ejercicios de práctica")
     #ej1()
