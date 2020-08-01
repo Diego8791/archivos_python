@@ -171,6 +171,20 @@ def ej4():
         else:
             break
 
+    # Inove: Está excelente el ejercicio resuelto, solo voy a agregar una nota
+    # de como podes evitar utiliza el bucle "for" para recorrer todo el diccionario
+    # cuando buscar una clave deseada que capaz no se encuentre en el diccionario:
+    
+    #if frut_verd != 'FIN':
+    #    stock = inventario.get(frut_verd)   # Inove: Devuelve el value para la key "frut_verd"
+    #    if stock is not None:       # Inove: Sino existe esa key, devuelve "None"
+    #        print(frut_verd,'stock:',stock)
+    #    else:
+    #        print('No hay stock de',frut_verd)
+    
+    # De esta forma utilizando el método "get" podes acceder a una clave del diccionario,
+    # y si esta no existe, el método retorna "None" en vez de "crashear" el sistema.
+            
 def ej5():
     # Ejercicios con archivos CSV
     inventario = {}
